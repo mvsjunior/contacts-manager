@@ -42,6 +42,24 @@ class PersonController extends Controller
             ->with('success', 'Person updated successfully.');
     }
 
+    public function show($id)
+{
+    // Carrega a pessoa + contatos
+    $person = Person::with('contacts')->find($id);
+
+    // Caso não exista
+    if (!$person) {
+        return redirect()
+            ->route('people.index')
+            ->with('error', 'Person not found.');
+    }
+
+    return view('people.show', [
+        'person' => $person,
+    ]);
+}
+
+
     public function destroy($id)
     {
         $person = Person::findOrFail($id);
