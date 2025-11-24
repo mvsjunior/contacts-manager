@@ -40,4 +40,10 @@ class AuthenticatedSessionController extends Controller
         Session::flash("message", "Incorrect email address or password.");
         return response()->redirectTo(route("login"));
     }
+
+    public function logout(Request $request, Logout $logoutAction): RedirectResponse
+    {
+        $logoutAction->handle($request);
+        return response()->redirectTo(route('home.index'));
+    }
 }

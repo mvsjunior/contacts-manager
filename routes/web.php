@@ -10,3 +10,4 @@ Route::get('/', function () {
 // Auth
 Route::get('/login', [AuthenticatedSessionController::class,'index'])->name('login');
 Route::post('/login', [AuthenticatedSessionController::class,'auth'])->name('login.auth');
+Route::get('/logout', [AuthenticatedSessionController::class,'logout'])->name('login.logout');
