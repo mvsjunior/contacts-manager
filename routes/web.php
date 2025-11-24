@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\PersonController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -11,3 +12,15 @@ Route::get('/', function () {
 Route::get('/login', [AuthenticatedSessionController::class,'index'])->name('login');
 Route::post('/login', [AuthenticatedSessionController::class,'auth'])->name('login.auth');
 Route::get('/logout', [AuthenticatedSessionController::class,'logout'])->name('login.logout');
+
+// People
+Route::get('/people', [PersonController::class,'index'])->name('people.index');
+Route::get('/people/{id}', [PersonController::class,'index'])->name('people.show');
+
+Route::get('/people/create', [PersonController::class,'index'])->name('people.form.store');
+Route::post('/people/create', [PersonController::class,'index'])->name('people.store');
+
+Route::get('/people/{id}/update', [PersonController::class,'index'])->name('people.form.update');
+Route::post('/people/{id}/update', [PersonController::class,'index'])->name('people.update');
+
+Route::get('/people/{id}/destroy', [PersonController::class,'index'])->name('people.destroy');
