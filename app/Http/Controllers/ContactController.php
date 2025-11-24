@@ -7,6 +7,7 @@ use App\Http\Requests\Contact\ContactUpdateRequest;
 use App\Models\Person;
 use App\Models\Contact;
 use App\Http\Requests\ContactRequest;
+use Illuminate\Http\Request;
 
 class ContactController extends Controller
 {
@@ -16,8 +17,9 @@ class ContactController extends Controller
         return view('contacts.index', compact('person'));
     }
 
-    public function create($personId)
+    public function create(Request $request)
     {
+        $personId = $request->query('person_id');
         $person = Person::findOrFail($personId);
         return view('contacts.create', compact('person'));
     }
