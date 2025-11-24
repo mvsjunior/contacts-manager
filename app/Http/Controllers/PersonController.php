@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Person\PersonStoreRequest;
 use App\Http\Requests\Person\PersonUpdateRequest;
 use App\Models\Person;
-use App\Http\Requests\PersonRequest;
 
 class PersonController extends Controller
 {

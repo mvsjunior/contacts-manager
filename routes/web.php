@@ -18,7 +18,7 @@ Route::get('/people', [PersonController::class,'index'])->name('people.index');
 Route::get('/people/show/{id}', [PersonController::class,'index'])->name('people.show');
 
 Route::get('/people/create', [PersonController::class,'create'])->name('people.create');
-Route::post('/people/create', [PersonController::class,'index'])->name('people.store');
+Route::post('/people/create', [PersonController::class,'store'])->name('people.store');
 
 Route::get('/people/update/{id}/', [PersonController::class,'index'])->name('people.edit');
 Route::post('/people/update/{id}/', [PersonController::class,'index'])->name('people.update');
