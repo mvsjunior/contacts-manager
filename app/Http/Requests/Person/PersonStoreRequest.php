@@ -9,7 +9,7 @@ class PersonStoreRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return true; // ajuste depois se for usar auth
+        return true;
     }
 
     public function rules(): array
