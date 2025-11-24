@@ -11,16 +11,16 @@ Route::get('/', function () {
 // Auth
 Route::get('/login', [AuthenticatedSessionController::class,'index'])->name('login');
 Route::post('/login', [AuthenticatedSessionController::class,'auth'])->name('login.auth');
-Route::get('/logout', [AuthenticatedSessionController::class,'logout'])->name('login.logout');
+Route::get('/logout', [AuthenticatedSessionController::class,'logout'])->name('logout');
 
 // People
 Route::get('/people', [PersonController::class,'index'])->name('people.index');
-Route::get('/people/{id}', [PersonController::class,'index'])->name('people.show');
+Route::get('/people/show/{id}', [PersonController::class,'index'])->name('people.show');
 
-Route::get('/people/create', [PersonController::class,'index'])->name('people.form.store');
+Route::get('/people/create', [PersonController::class,'create'])->name('people.create');
 Route::post('/people/create', [PersonController::class,'index'])->name('people.store');
 
-Route::get('/people/{id}/update', [PersonController::class,'index'])->name('people.form.update');
-Route::post('/people/{id}/update', [PersonController::class,'index'])->name('people.update');
+Route::get('/people/update/{id}/', [PersonController::class,'index'])->name('people.edit');
+Route::post('/people/update/{id}/', [PersonController::class,'index'])->name('people.update');
 
-Route::get('/people/{id}/destroy', [PersonController::class,'index'])->name('people.destroy');
+Route::get('/people/destroy/{id}/', [PersonController::class,'index'])->name('people.destroy');

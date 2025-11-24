@@ -2,63 +2,53 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Requests\Person\PersonStoreRequest;
+use App\Http\Requests\Person\PersonUpdateRequest;
+use App\Models\Person;
+use App\Http\Requests\PersonRequest;
 
 class PersonController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $people = Person::paginate(10);
+        return view('people.index', compact('people'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        return view('people.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function store(PersonStoreRequest $request)
     {
-        //
+        Person::create($request->validated());
+
+        return redirect()->route('people.index')
+            ->with('success', 'Person created successfully.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function edit($id)
     {
-        //
+        $person = Person::findOrFail($id);
+        return view('people.edit', compact('person'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function update(PersonUpdateRequest $request, $id)
     {
-        //
+        $person = Person::findOrFail($id);
+        $person->update($request->validated());
+
+        return redirect()->route('people.index')
+            ->with('success', 'Person updated successfully.');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function destroy($id)
     {
-        //
-    }
+        $person = Person::findOrFail($id);
+        $person->delete();
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return redirect()->route('people.index')
+            ->with('success', 'Person deleted successfully.');
     }
 }
