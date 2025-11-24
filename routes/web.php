@@ -23,4 +23,4 @@ Route::post('/people/create', [PersonController::class,'store'])->name('people.s
 Route::get('/people/update/{id}/', [PersonController::class,'index'])->name('people.edit');
 Route::post('/people/update/{id}/', [PersonController::class,'index'])->name('people.update');
 
-Route::get('/people/destroy/{id}/', [PersonController::class,'index'])->name('people.destroy');
+Route::post('/people/destroy/{id}/', [PersonController::class,'destroy'])->name('people.destroy');

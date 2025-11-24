@@ -47,7 +47,6 @@ class PersonController extends Controller
         $person = Person::findOrFail($id);
         $person->delete();
 
-        return redirect()->route('people.index')
-            ->with('success', 'Person deleted successfully.');
+        return response()->redirectTo(route('people.index'))->with('success', 'Person deleted successfully.');
     }
 }

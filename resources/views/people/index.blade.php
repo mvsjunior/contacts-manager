@@ -75,8 +75,6 @@
                                         class="d-inline"
                                         onsubmit="return confirm('Are you sure you want to delete this person?');">
                                     @csrf
-                                    @method('DELETE')
-
                                     <button class="btn btn-sm btn-danger">
                                         Delete
                                     </button>
