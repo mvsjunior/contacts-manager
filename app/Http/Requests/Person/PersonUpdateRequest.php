@@ -18,13 +18,11 @@ class PersonUpdateRequest extends FormRequest
 
         return [
             'name' => ['required', 'string', 'min:5'],
-            'email' => [
-                'required',
-                'email',
-                Rule::unique('people', 'email')
-                    ->ignore($id)
-                    ->whereNull('deleted_at'),
-            ],
+                'email' => [
+                    'required',
+                    'email',
+                    'unique:people,email,' . $this->id
+                ],
             // 'avatar' => ['nullable', 'string'],
         ];
     }

@@ -20,7 +20,7 @@ Route::get('/people/show/{id}', [PersonController::class,'index'])->name('people
 Route::get('/people/create', [PersonController::class,'create'])->name('people.create');
 Route::post('/people/create', [PersonController::class,'store'])->name('people.store');
 
-Route::get('/people/update/{id}/', [PersonController::class,'index'])->name('people.edit');
-Route::post('/people/update/{id}/', [PersonController::class,'index'])->name('people.update');
+Route::get('/people/edit/{id}/', [PersonController::class,'edit'])->name('people.edit');
+Route::post('/people/update/{id}/', [PersonController::class,'update'])->name('people.update');
 
 Route::post('/people/destroy/{id}/', [PersonController::class,'destroy'])->name('people.destroy');
