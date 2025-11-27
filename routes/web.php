@@ -6,7 +6,7 @@ use App\Http\Controllers\ContactController;
 use Illuminate\Support\Facades\Route;
 
 // HOME
-Route::get('/people', [PersonController::class,'index'])->name('home.index');
+Route::get('/', [PersonController::class,'index'])->name('home.index');
 
 // Auth
 Route::get('/login', [AuthenticatedSessionController::class,'index'])->name('login');
