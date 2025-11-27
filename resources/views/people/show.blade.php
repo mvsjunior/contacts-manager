@@ -19,7 +19,6 @@
                 <form action="{{ route('people.destroy', $person->id) }}" method="POST" class="d-inline"
                     onsubmit="return confirm('Are you sure you want to delete this person?')">
                     @csrf
-                    @method('DELETE')
                     <button class="btn btn-sm btn-danger">Delete</button>
                 </form>
             </div>
@@ -62,7 +61,7 @@
                                 <th width='42' class="text-center">ID</th>
                                 <th width='150'>Country Code</th>
                                 <th >Number</th>
-                                <th width="200">Actions</th>
+                                <th width="150">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -72,11 +71,6 @@
                                     <td>{{ $contact->country_code }}</td>
                                     <td>{{ $contact->number }}</td>
                                     <td>
-                                        <a href="{{ route('contacts.show', $contact->id) }}"
-                                           class="btn btn-sm btn-info">
-                                            View
-                                        </a>
-
                                         <a href="{{ route('contacts.edit', $contact->id) }}"
                                            class="btn btn-sm btn-primary">
                                             Edit
@@ -86,7 +80,6 @@
                                               method="POST" class="d-inline"
                                               onsubmit="return confirm('Are you sure you want to delete this contact?')">
                                             @csrf
-                                            @method('DELETE')
                                             <button class="btn btn-sm btn-danger">
                                                 Delete
                                             </button>
