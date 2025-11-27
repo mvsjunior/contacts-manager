@@ -11,7 +11,7 @@ Route::get('/', [PersonController::class,'index'])->name('home.index');
 // Auth
 Route::get('/login', [AuthenticatedSessionController::class,'index'])->name('login');
 Route::post('/login', [AuthenticatedSessionController::class,'auth'])->name('login.auth');
-Route::get('/logout', [AuthenticatedSessionController::class,'logout'])->name('logout');
+Route::post('/logout', [AuthenticatedSessionController::class,'logout'])->name('logout');
 
 // People
 Route::get('/people', [PersonController::class,'index'])->name('people.index');
