@@ -5,9 +5,8 @@ use App\Http\Controllers\PersonController;
 use App\Http\Controllers\ContactController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('home.index');
+// HOME
+Route::get('/people', [PersonController::class,'index'])->name('home.index');
 
 // Auth
 Route::get('/login', [AuthenticatedSessionController::class,'index'])->name('login');
