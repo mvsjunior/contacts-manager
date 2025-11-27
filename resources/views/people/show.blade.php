@@ -9,6 +9,12 @@
     <a href="{{ route('people.index') }}" class="btn btn-secondary mb-3">
         ← Back to List
     </a>
+    {{-- Success Message --}}
+@if(session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+@endif
 
     <div class="card shadow-sm">
         <div class="card-header d-flex justify-content-between align-items-center">

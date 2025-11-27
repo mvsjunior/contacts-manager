@@ -134,29 +134,33 @@ class ContactController extends Controller
         return response()->json($result);
     }
 
-    public function edit($personId, $contactId)
+    public function edit(Request $request)
     {
-        $person  = Person::findOrFail($personId);
-        $contact = Contact::where('person_id', $personId)->findOrFail($contactId);
+        // $person  = Person::findOrFail($request->id);
+        $contact = Contact::with(['person'])->find($request->id);
+        $person = $contact->person;
 
         return view('contacts.edit', compact('person', 'contact'));
     }
 
-    public function update(ContactUpdateRequest $request, $personId, $contactId)
+    public function update(ContactUpdateRequest $request)
     {
+        $personId = $request->person_id;
+        $contactId = $request->contact_id;
         $contact = Contact::where('person_id', $personId)->findOrFail($contactId);
         $contact->update($request->validated());
 
-        return redirect()->route('contacts.index', $personId)
+        return response()->redirectTo('people/show/'.$personId)
             ->with('success', 'Contact updated successfully.');
     }
 
-    public function destroy($personId, $contactId)
+    public function destroy(Request $request)
     {
-        $contact = Contact::where('person_id', $personId)->findOrFail($contactId);
+        $contact = Contact::with('person')->findOrFail($request->id);
+        $person = $contact->person;
         $contact->delete();
 
-        return redirect()->route('contacts.index', $personId)
+        return response()->redirectTo('people/show/'.$person->id)
             ->with('success', 'Contact deleted successfully.');
     }
 }
