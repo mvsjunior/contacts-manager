@@ -49,5 +49,57 @@
             <a href="{{ route('contacts.create', ['person_id' => $person->id]) }}" class="btn btn-sm btn-success">
                 Add New Contact
             </a>
-        </d
+        </div>
+
+        <div class="card-body">
+            @if($person->contacts->count() === 0)
+                <p class="text-muted">No contacts registered.</p>
+            @else
+                <div class="table-responsive table-sm">
+                    <table class="table table-bordered table-striped small">
+                        <thead class="table-light">
+                            <tr>
+                                <th width='42' class="text-center">ID</th>
+                                <th width='150'>Country Code</th>
+                                <th >Number</th>
+                                <th width="200">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($person->contacts as $contact)
+                                <tr>
+                                    <td align="center">{{ $contact->id }}</td>
+                                    <td>{{ $contact->country_code }}</td>
+                                    <td>{{ $contact->number }}</td>
+                                    <td>
+                                        <a href="{{ route('contacts.show', $contact->id) }}"
+                                           class="btn btn-sm btn-info">
+                                            View
+                                        </a>
+
+                                        <a href="{{ route('contacts.edit', $contact->id) }}"
+                                           class="btn btn-sm btn-primary">
+                                            Edit
+                                        </a>
+
+                                        <form action="{{ route('contacts.destroy', $contact->id) }}"
+                                              method="POST" class="d-inline"
+                                              onsubmit="return confirm('Are you sure you want to delete this contact?')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button class="btn btn-sm btn-danger">
+                                                Delete
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            @endif
+        </div>
+    </div>
+
+</div>
 @endsection

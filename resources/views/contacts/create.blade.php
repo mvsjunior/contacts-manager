@@ -1,136 +1,134 @@
 @extends('layouts.app')
 
-@section('title', 'Create Contact')
-
 @section('content')
+<style>
+    <!-- Custom CSS to make Select2 look like Bootstrap 5 form-control -->
+<style>
+/* container */
+.select2-container--default .select2-selection--single {
+    height: calc(2.25rem + 2px); /* match .form-control height */
+    padding: 0.375rem 0.75rem;
+    border: 1px solid #ced4da;
+    border-radius: 0.375rem;
+    background-color: #fff;
+    box-shadow: none;
+}
+
+/* text alignment and font */
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    line-height: 1.5;
+    color: #212529;
+    padding-left: 0;
+}
+
+/* caret spacing */
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: calc(2.25rem + 2px);
+    right: 0.5rem;
+}
+
+/* make the dropdown items same font/size */
+.select2-container .select2-results__option {
+    padding: 0.5rem 0.75rem;
+}
+
+/* when Select2 is focused (bootstrap style) */
+.select2-container--default.select2-container--focus .select2-selection--single {
+    border-color: #86b7fe;
+    box-shadow: 0 0 0 0.25rem rgba(13,110,253,0.25);
+}
+
+/* ensure width 100% like .form-select */
+.select2-container {
+    width: 100% !important;
+}
+</style>
 <div class="container mt-4">
+    <h2>Create Contact</h2>
 
-    <h2>Create Contact for: <strong>{{ $person->name }}</strong></h2>
-
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <strong>There were some errors:</strong>
-            <ul class="mt-2 mb-0">
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
-
-    <form action="{{ route('contacts.store', $person->id) }}" method="POST">
+    <form action="{{ route('contacts.store') }}" method="POST">
         @csrf
 
-        {{-- COUNTRY SEARCH --}}
+        <input type="hidden" name="person_id" value="{{ $person->id }}">
+
+        {{-- Country dropdown --}}
         <div class="mb-3">
-            <label for="country_search" class="form-label">Country</label>
+            <label class="form-label">Country</label>
+            <select id="country-select" name="country_code" class="form-select"></select>
 
-            <input type="text" 
-                   id="country_search" 
-                   class="form-control" 
-                   placeholder="Search country..."
-                   autocomplete="off">
-
-            <input type="hidden" name="country_code" id="country_code">
-
-            <div id="country_results"
-                 class="list-group mt-1"
-                 style="max-height: 200px; overflow-y: auto; display:none;">
-            </div>
-
-            <small class="text-muted">Type a country name to search.</small>
+            @error('country_code')
+                <div class="text-danger small">{{ $message }}</div>
+            @enderror
         </div>
 
-        {{-- NUMBER --}}
+        {{-- Number --}}
         <div class="mb-3">
-            <label for="number" class="form-label">Number (9 digits)</label>
-            <input type="text"
-                   name="number"
-                   id="number"
-                   value="{{ old('number') }}"
-                   maxlength="9"
-                   class="form-control"
-                   placeholder="123456789"
-                   required>
+            <label class="form-label">Number (9 digits)</label>
+            <input 
+                type="text" 
+                class="form-control"
+                name="number"
+                maxlength="9"
+                value="{{ old('number') }}"
+                required
+            >
+
+            @error('number')
+                <div class="text-danger small">{{ $message }}</div>
+            @enderror
         </div>
 
-        <button type="submit" class="btn btn-primary">Save Contact</button>
-
-        <a href="{{ route('people.show', $person->id) }}" class="btn btn-secondary">
-            Back to Person
-        </a>
+        <button class="btn btn-primary">Save Contact</button>
+        <a href="{{ route('people.show', $person->id) }}" class="btn btn-secondary">Back</a>
     </form>
 </div>
 @endsection
 
 
 @section('scripts')
-<script>
-document.addEventListener("DOMContentLoaded", function () {
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.rtl.min.css" />
 
-    const input = document.querySelector("#country_search");
-    const results = document.querySelector("#country_results");
-    const hiddenCode = document.querySelector("#country_code");
+    {{-- JQuery (necessário para Select2) --}}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-    let searchTimeout = null;
+    {{-- Select2 --}}
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
-    input.addEventListener("input", function () {
-
-        const query = this.value.trim();
-
-        hiddenCode.value = ""; // limpa quando o usuário edita
-
-        if (query.length < 2) {
-            results.style.display = "none";
-            results.innerHTML = "";
-            return;
+    <script>
+$(document).ready(function () {
+    $('#country-select').select2({
+        placeholder: "Search a country...",
+        allowClear: true,
+        ajax: {
+            url: "{{ route('api.countries.search') }}",
+            delay: 300,
+            dataType: 'json',
+            data: function (params) {
+                return { q: params.term || '' };
+            },
+            processResults: function (data) {
+                return {
+                    results: data.map(function (item) {
+                        return {
+                            id: item.calling_code,
+                            text: item.label
+                        };
+                    })
+                };
+            }
         }
-
-        clearTimeout(searchTimeout);
-        searchTimeout = setTimeout(() => {
-            fetch("https://restcountries.com/v3.1/name/" + query)
-                .then(res => res.json())
-                .then(data => {
-                    results.innerHTML = "";
-                    
-                    if (!Array.isArray(data)) {
-                        results.style.display = "none";
-                        return;
-                    }
-
-                    data.forEach(country => {
-                        if (!country.idd || !country.name) return;
-
-                        const name = country.name.common;
-                        const code = country.idd?.root && country.idd?.suffixes?.length 
-                            ? country.idd.root.replace("+", "") + country.idd.suffixes[0] 
-                            : null;
-
-                        if (!code) return;
-
-                        const item = document.createElement("button");
-                        item.type = "button";
-                        item.classList.add("list-group-item", "list-group-item-action");
-                        item.textContent = `${name} (${code})`;
-
-                        item.addEventListener("click", function () {
-                            input.value = `${name} (${code})`;
-                            hiddenCode.value = code;
-                            results.style.display = "none";
-                        });
-
-                        results.appendChild(item);
-                    });
-
-                    results.style.display = results.innerHTML.trim() ? "block" : "none";
-
-                })
-                .catch(() => {
-                    results.style.display = "none";
-                });
-
-        }, 300); // debounce
     });
+
+    // If there's an old value (validation), preselect it
+    const oldCode = "{{ old('country_code') }}";
+    const oldLabel = "{{ old('country_label') ?? '' }}"; // set this in controller/session if possible
+    if (oldCode) {
+        // create option and mark as selected
+        const option = new Option(oldLabel || oldCode, oldCode, true, true);
+        $('#country-select').append(option).trigger('change');
+    }
 });
 </script>
+
 @endsection
